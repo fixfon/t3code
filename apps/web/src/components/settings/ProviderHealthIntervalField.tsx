@@ -14,7 +14,8 @@ import {
 /**
  * Provider health interval in seconds. Edits stay in a local draft so holding
  * a stepper accumulates steps and a half-typed value is never saved; the
- * normalized value is persisted once, when the edit is committed.
+ * normalized value is persisted once, when the edit is committed (blur,
+ * Enter, arrow keys, or releasing a stepper).
  */
 export function ProviderHealthIntervalField({
   seconds,
@@ -51,6 +52,10 @@ export function ProviderHealthIntervalField({
         <NumberFieldDecrement aria-label={`Decrease ${label}`} />
         <NumberFieldInput
           aria-label={`${label.charAt(0).toUpperCase()}${label.slice(1)} in seconds`}
+          // Base UI commits on blur and arrow keys but ignores Enter.
+          onKeyDown={(event) => {
+            if (event.key === "Enter") event.currentTarget.blur();
+          }}
         />
         <NumberFieldIncrement aria-label={`Increase ${label}`} />
       </NumberFieldGroup>
