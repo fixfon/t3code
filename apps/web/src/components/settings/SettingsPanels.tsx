@@ -136,6 +136,7 @@ import {
   NumberFieldIncrement,
   NumberFieldInput,
 } from "../ui/number-field";
+import { ProviderHealthIntervalField } from "./ProviderHealthIntervalField";
 import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "../ui/select";
 import { Switch } from "../ui/switch";
 import { ScopedSwitch } from "./ScopedSwitch";
@@ -149,8 +150,6 @@ import {
   getChangedBrowserSettingLabels,
   getChangedTypographySettingLabels,
   normalizeIntervalSeconds,
-  normalizeProviderHealthIntervalSeconds,
-  PROVIDER_HEALTH_INTERVAL_STEP_SECONDS,
   hasChangedBackgroundActivitySettings,
   isProjectGroupingEnabled,
   projectGroupingModeFromToggle,
@@ -1003,32 +1002,19 @@ function BackgroundActivityAdvancedDialog({
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-2">
-                <NumberField
-                  value={providerHealthRefreshIntervalSeconds}
-                  min={0}
-                  step={PROVIDER_HEALTH_INTERVAL_STEP_SECONDS}
-                  size="sm"
-                  className="w-32"
-                  onValueCommitted={(value) =>
+                <ProviderHealthIntervalField
+                  seconds={providerHealthRefreshIntervalSeconds}
+                  label="provider health interval"
+                  onCommit={(seconds) =>
                     updateSettings(
                       backgroundActivityOverrideSettings(
                         settings.backgroundActivity,
                         resolvedBackgroundActivity,
-                        {
-                          providerHealthRefreshInterval: Duration.seconds(
-                            normalizeProviderHealthIntervalSeconds(value),
-                          ),
-                        },
+                        { providerHealthRefreshInterval: Duration.seconds(seconds) },
                       ),
                     )
                   }
-                >
-                  <NumberFieldGroup>
-                    <NumberFieldDecrement aria-label="Decrease provider health interval" />
-                    <NumberFieldInput aria-label="Provider health interval in seconds" />
-                    <NumberFieldIncrement aria-label="Increase provider health interval" />
-                  </NumberFieldGroup>
-                </NumberField>
+                />
                 <span className="text-xs text-muted-foreground">seconds</span>
               </div>
             </div>
