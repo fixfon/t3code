@@ -81,7 +81,7 @@ export function getBackgroundActivityBaseProfile(
  * patched override cannot make background probes run back-to-back. Zero stays
  * zero because it disables periodic checks.
  */
-export function clampProviderHealthRefreshInterval(interval: Duration.Duration): Duration.Duration {
+function clampProviderHealthRefreshInterval(interval: Duration.Duration): Duration.Duration {
   const millis = Duration.toMillis(interval);
   return millis > 0 && millis < Duration.toMillis(MIN_PROVIDER_HEALTH_REFRESH_INTERVAL)
     ? MIN_PROVIDER_HEALTH_REFRESH_INTERVAL
