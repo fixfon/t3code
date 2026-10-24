@@ -7512,6 +7512,10 @@ export const makeCodexAdapterV2 = Effect.fn("makeCodexAdapterV2")(function* (
                 Effect.andThen(
                   client.request("thread/fork", {
                     threadId,
+                    // The adapter only needs thread metadata; without this the
+                    // response carries the whole history, which overruns the
+                    // transport limit on very large threads.
+                    excludeTurns: true,
                     ...(boundary.lastTurnId === undefined
                       ? {}
                       : { lastTurnId: boundary.lastTurnId }),
